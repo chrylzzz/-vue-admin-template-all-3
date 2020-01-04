@@ -386,7 +386,9 @@ export const asyncRoutes = [
       },
     ]
   },
-  //zzz
+  /**
+   * 注意:  此处path与vueadmin-template不同,path出有 / 前缀
+   */
   {
     path: '/zzz',
     component: Layout,
