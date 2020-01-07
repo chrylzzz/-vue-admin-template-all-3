@@ -80,6 +80,7 @@
         @current-change="handleSelectCurrentChange"
         style="width: 95%"
         :index="indexMethod"
+        
       >
         <!-- 
         @cell-dblclick="dbClickRow"
@@ -197,7 +198,8 @@ export default {
           }
         ],
         desc: [{ required: true, message: "请填写活动形式", trigger: "blur" }]
-      }
+      },
+      
     };
   },
   components: {},

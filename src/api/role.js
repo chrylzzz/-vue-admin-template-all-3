@@ -36,3 +36,11 @@ export function deleteRole(id) {
     method: 'delete'
   })
 }
+// -------------------------------------------pro
+//获得所有权限列表
+export function getRoutesPro() {
+  return request({
+    url: '/routesPro',
+    method: 'get'
+  })
+}

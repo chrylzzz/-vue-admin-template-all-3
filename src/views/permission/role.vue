@@ -5,17 +5,20 @@
     <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
       <el-table-column align="center" label="Role Key" width="220">
         <template slot-scope="scope">
-          {{ scope.row.key }}
+          <!-- {{ scope.row.key }} -->
+          {{ scope.row.roleId }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="Role Name" width="220">
         <template slot-scope="scope">
-          {{ scope.row.name }}
+          <!-- {{ scope.row.name }} -->
+          {{ scope.row.roleName }}
         </template>
       </el-table-column>
       <el-table-column align="header-center" label="Description">
         <template slot-scope="scope">
-          {{ scope.row.description }}
+          <!-- {{ scope.row.description }} -->
+          {{ scope.row.roleDesc }}
         </template>
       </el-table-column>
       <el-table-column align="center" label="Operations">
@@ -45,6 +48,8 @@
             :check-strictly="checkStrictly"
             :data="routesData"
             :props="defaultProps"
+            accordion
+            highlight-current
             show-checkbox
             node-key="path"
             class="permission-tree"
@@ -84,6 +89,12 @@ export default {
         children: 'children',
         label: 'title'
       }
+      ,
+      
+        
+      //
+
+
     }
   },
   computed: {
@@ -93,6 +104,7 @@ export default {
   },
   created() {
     // Mock: get all routes and roles list from server
+    //获取 role menu
     this.getRoutes()
     this.getRoles()
   },
@@ -104,6 +116,7 @@ export default {
     },
     async getRoles() {
       const res = await getRoles()
+      // debugger
       this.rolesList = res.data
     },
 
