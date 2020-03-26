@@ -448,10 +448,12 @@ export const asyncRoutes = [
 ]
 //只初始化 , 通用页面
 const createRouter = () => new Router({
-  // 去掉 #
+  // 去掉 # ,刷新会引起地址栏当做路径访问后台,而vue的地址栏是虚拟的
   // mode: 'history', // require service support
+  // base: '/chryl',
   scrollBehavior: () => ({ y: 0 }),
-  routes: constantRoutes
+  routes: constantRoutes,
+  
 })
 
 const router = createRouter()

@@ -27,6 +27,7 @@ module.exports = {
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
   publicPath: '/',
+  // publicPath: './',
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
@@ -38,6 +39,14 @@ module.exports = {
       warnings: false,
       errors: true
     },
+    // historyApiFallback: true,
+    // historyApiFallback: {
+		// 	rewrites: [{
+		// 		from: /.*/g,
+		// 		to: '@/views/error-page/404.vue',
+		// 	}]
+		// },
+    
     proxy: {
       // change xxx-api/login => mock/login
       // detail: https://cli.vuejs.org/config/#devserver-proxy
@@ -50,7 +59,7 @@ module.exports = {
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
         }
-      }
+      },
     },
     // after: require('./mock/mock-server.js')
   },
@@ -62,7 +71,8 @@ module.exports = {
       alias: {
         '@': resolve('src')
       }
-    }
+    },
+
   },
   chainWebpack(config) {
     config.plugins.delete('preload') // TODO: need test

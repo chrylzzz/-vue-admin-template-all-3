@@ -1,7 +1,7 @@
 <template>
   <div class="app-container">
-    <el-button type="primary" @click="handleAddRole">新增一级</el-button>
-    <el-button type="primary" @click="handleAddRole">新增二级</el-button>
+    <el-button type="primary" @click="handleAddPerm_1">新增一级</el-button>
+    <el-button type="primary" @click="handleAddPerm_2">新增二级</el-button>
     <div>
       <el-table
         :data="tableData"
@@ -10,97 +10,71 @@
         style="width: 100%;margin-top:30px;"
         border
       >
-        <!-- <el-table-column type="expand">
-        <template slot-scope="props">
-          <el-form label-position="left" inline class="demo-table-expand">
-            <el-form-item label="商品名称">
-              <span>{{ props.row.name }}</span>
-            </el-form-item>
-            <el-form-item label="所属店铺">
-              <span>{{ props.row.shop }}</span>
-            </el-form-item>
-            <el-form-item label="商品 ID">
-              <span>{{ props.row.id }}</span>
-            </el-form-item>
-            <el-form-item label="店铺 ID">
-              <span>{{ props.row.shopId }}</span>
-            </el-form-item>
-            <el-form-item label="商品分类">
-              <span>{{ props.row.category }}</span>
-            </el-form-item>
-            <el-form-item label="店铺地址">
-              <span>{{ props.row.address }}</span>
-            </el-form-item>
-            <el-form-item label="商品描述">
-              <span>{{ props.row.desc }}</span>
-            </el-form-item>
-          </el-form>
-        </template>
-        </el-table-column>-->
-        <el-table-column label="商品 ID" prop="id"></el-table-column>
-        <el-table-column label="商品名称" prop="label"></el-table-column>
+        <el-table-column label="权限 ID" prop="id"></el-table-column>
+        <el-table-column label="权限名称" prop="label"></el-table-column>
         <el-table-column label="描述" prop="desc"></el-table-column>
       </el-table>
     </div>
-    <!-- <el-table :data="rolesList" style="width: 100%;margin-top:30px;" border>
-      <el-table-column align="center" label="Role Key" width="220">
-        <template slot-scope="scope">
-          {{ scope.row.roleId }}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="Role Name" width="220">
-        <template slot-scope="scope">
-          {{ scope.row.roleName }}
-        </template>
-      </el-table-column>
-      <el-table-column align="header-center" label="Description">
-        <template slot-scope="scope">
-          {{ scope.row.roleDesc }}
-        </template>
-      </el-table-column>
-      <el-table-column align="center" label="Operations">
-        <template slot-scope="scope">
-          <el-button type="primary" size="small" @click="handleEdit(scope)">修改</el-button>
-          <el-button type="danger" size="small" @click="handleDelete(scope)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>-->
 
+    <!-- 1级目录 -->
     <!-- 通过 自定义 属性 :dialogType, 来判断是new 还是edit -->
-    <el-dialog :visible.sync="dialogVisible" :title="dialogType==='edit'?'Edit Role':'New Role'">
-      <el-form :model="role" label-width="80px" label-position="left">
-        <!-- 注意
-          el-select 的 v-model="value" ,value该选项为''
-          value:''
-        -->
-        <el-select v-model="value" placeholder="请选择">
-          <el-option
-            v-for="item in permParentMenu"
-            :key="item.pId"
-            :label="item.pLabel"
-            :value="item.pLabel"
-          >
-            <span style="float: left">{{ item.pLabel }}</span>
-            <!-- <span style="float: right; color: #8492a6; font-size: 13px">{{ item.pLabel }}</span> -->
-          </el-option>
-        </el-select>
-        <!-- 
-:default-checked-keys="permissionsChecked"
-
-            注:没有 该属性值,会直接不显示菜单名字
-            :props="defaultProps"
-            使选中根节点 不选择子:父子不相关
-            :check-strictly="checkStrictly"
-            tree默认选择
-            :default-checked-keys="permissionsChecked"
-            :default-checked-keys="[5]"
-            点击节点就选中
-            check-on-click-node=true
-        -->
+    <el-dialog :visible.sync="dialogVisible_1" :title="'新增一级目录'">
+      <el-form
+        :model="thisMenu"
+        label-width="80px"
+        label-position="left"
+        :rules="rules"
+        ref="thisMenu"
+      >
+        <el-form-item label="一级菜单" prop="thisFirMenu">
+          <el-input v-model="thisMenu.thisFirMenu" placeholder="一级 Name" style="width:300px" />
+        </el-form-item>
       </el-form>
       <div style="text-align:right;">
-        <el-button type="danger" @click="dialogVisible=false">Cancel</el-button>
-        <el-button type="primary" @click="confirmRole">Confirm</el-button>
+        <el-button type="danger" @click="dialogVisible_1=false">Cancel</el-button>
+        <el-button type="primary" @click="confirmPerm_1('thisMenu')">Confirm</el-button>
+      </div>
+    </el-dialog>
+    <!-- 二级目录 -->
+    <!-- 通过 自定义 属性 :dialogType, 来判断是new 还是edit -->
+    <el-dialog :visible.sync="dialogVisible_2" :title="'新增二级目录'">
+      <el-form
+        :model="thisMenu"
+        label-width="80px"
+        label-position="left"
+        :rules="rules"
+        ref="thisMenu"
+      >
+        <!-- 注意
+          1.一般form 表单,都需要在data 中定义 相对应的数据组[] ,并且规定rules,
+          2.
+          el-select 的 v-model="value" ,value该选项为''
+          value:'' , 该value 为 下拉菜单选择的属性 :value的值,但是, 一般使用form数据组,来规定提交的rules,
+          这样就必须使用rules和form数据组的字段一直,并且,在v-model中也要相对应
+          3.
+          得到vue 下拉框的 值: 直接用el-select标签里的v-model中的数据来获取
+        -->
+        <el-form-item label="一级菜单" prop="thisFirMenu">
+          <el-select v-model="thisMenu.thisFirMenu" placeholder="请选择" style="width:300px" ß>
+            <el-option
+              ref="select"
+              v-for="item in permParentMenu"
+              :key="item.pId"
+              :label="item.pLabel"
+              :value="item.pId"
+            >
+              <span style="float: left">{{ item.pLabel }}</span>
+              <span style="float: right; color: #8492a6; font-size: 13px">{{ item.pLabel }}</span>
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="二级菜单" prop="thisSecMenu">
+          <el-input v-model="thisMenu.thisSecMenu" placeholder="二级菜单 Name" style="width:300px" />
+        </el-form-item>
+      </el-form>
+      <div style="text-align:right;">
+        <el-button type="danger" @click="dialogVisible_2=false">Cancel</el-button>
+        <el-button type="primary" @click="confirmPerm_2('thisMenu')">Confirm</el-button>
       </div>
     </el-dialog>
   </div>
@@ -118,12 +92,17 @@ import {
   //pro
   getRoutesPro
 } from "@/api/role";
-import service from "../../utils/request";
+
 //引入permissions
 import {
   //pro
-  getPerMenu
+  getPerMenu,
+  addSecMenu,
 } from "@/api/permissions";
+
+import service from "../../utils/request";
+
+
 
 const defaultRole = {
   key: "",
@@ -138,16 +117,12 @@ const defaultRole = {
   checkedKeys: ""
 };
 //
-const defaultPermMenu = {};
 
 export default {
   data() {
     return {
       role: Object.assign({}, defaultRole),
       routes: [],
-      rolesList: [],
-      dialogVisible: false,
-      dialogType: "new",
       checkStrictly: false,
       defaultProps: {
         children: "children",
@@ -158,7 +133,22 @@ export default {
       tableData: [],
       permParentMenu: [],
       //el-select,注意该选项为''
-      value: ""
+      // value: "",
+      //一级目录
+      dialogVisible_1: false,
+      dialogVisible_2: false,
+      thisMenu: {
+        thisFirMenu: "",
+        thisSecMenu: ""
+      },
+      rules: {
+        thisFirMenu: [
+          { required: true, message: "请选择活动区域", trigger: "change" }
+        ],
+        thisSecMenu: [
+          { required: true, message: "请输入二级名称", trigger: "blur" }
+        ]
+      }
     };
   },
   computed: {
@@ -180,14 +170,16 @@ export default {
   created() {
     // Mock: get all routes and roles list from server
     //获取 role menu
-    this.getRoutes();
-    this.getRoles();
+    this.getRoutesPro();
     this.getParentMenu();
 
     // 初始化监听  === 这不是一个方法
     // this.dialogVisible();
   },
   methods: {
+    thisSelect(id) {
+      console.log(id);
+    },
     async getParentMenu() {
       const res = await getPerMenu();
       this.permParentMenu = res.data;
@@ -204,8 +196,7 @@ export default {
       });
       //查看选中
     },
-    async getRoutes() {
-      // const res = await getRoutes();
+    async getRoutesPro() {
       const res = await getRoutesPro();
       this.serviceRoutes = res.data;
       this.tableData = res.data;
@@ -213,120 +204,23 @@ export default {
       //   this.routes = this.generateRoutes(res.data)
       this.routes = res.data;
     },
-    async getRoles() {
-      const res = await getRoles();
-      this.rolesList = res.data;
-    },
-
-    // Reshape the routes structure so that it looks the same as the sidebar
-    generateRoutes(routes, basePath = "/") {
-      const res = [];
-
-      for (let route of routes) {
-        // skip some route
-        if (route.hidden) {
-          continue;
-        }
-
-        const onlyOneShowingChild = this.onlyOneShowingChild(
-          route.children,
-          route
-        );
-
-        if (route.children && onlyOneShowingChild && !route.alwaysShow) {
-          route = onlyOneShowingChild;
-        }
-
-        const data = {
-          path: path.resolve(basePath, route.path),
-          title: route.meta && route.meta.title
-        };
-
-        // recursive child routes
-        if (route.children) {
-          data.children = this.generateRoutes(route.children, data.path);
-        }
-        res.push(data);
-      }
-      return res;
-    },
-    generateArr(routes) {
-      let data = [];
-      routes.forEach(route => {
-        data.push(route);
-        if (route.children) {
-          const temp = this.generateArr(route.children);
-          if (temp.length > 0) {
-            data = [...data, ...temp];
-          }
-        }
-      });
-      return data;
-    },
-    handleAddRole() {
+    handleAddPerm_1() {
       this.role = Object.assign({}, defaultRole);
       if (this.$refs.tree) {
         this.$refs.tree.setCheckedNodes([]);
       }
-      this.dialogType = "new";
-      this.dialogVisible = true;
+      this.dialogType = "new_1";
+      this.dialogVisible_1 = true;
     },
-    handleEdit(scope) {
-      this.dialogType = "edit";
-      this.dialogVisible = true;
-      this.checkStrictly = true;
-      this.role = deepClone(scope.row);
-      //加载已拥有的角色权限
-      this.getPermissionsById(scope);
-      //   this.$nextTick(() => {
-      //     const routes = this.generateRoutes(this.role.routes);
-      //     this.$refs.tree.setCheckedNodes(this.generateArr(routes));
-      //     // set checked state of a node not affects its father and child nodes
-      //     this.checkStrictly = false;
-      //   });
-    },
-    handleDelete({ $index, row }) {
-      this.$confirm("Confirm to remove the role?", "Warning", {
-        confirmButtonText: "Confirm",
-        cancelButtonText: "Cancel",
-        type: "warning"
-      })
-        .then(async () => {
-          await deleteRole(row.roleId);
-          this.rolesList.splice($index, 1);
-          this.$message({
-            type: "success",
-            message: "Delete succed!"
-          });
-        })
-        .catch(err => {
-          console.error(err);
-        });
-    },
-    generateTree(routes, basePath = "/", checkedKeys) {
-      const res = [];
-
-      for (const route of routes) {
-        const routePath = path.resolve(basePath, route.path);
-
-        // recursive child routes
-        if (route.children) {
-          route.children = this.generateTree(
-            route.children,
-            routePath,
-            checkedKeys
-          );
-        }
-
-        if (
-          checkedKeys.includes(routePath) ||
-          (route.children && route.children.length >= 1)
-        ) {
-          res.push(route);
-        }
+    handleAddPerm_2() {
+      this.role = Object.assign({}, defaultRole);
+      if (this.$refs.tree) {
+        this.$refs.tree.setCheckedNodes([]);
       }
-      return res;
+      this.dialogType = "new_2";
+      this.dialogVisible_2 = true;
     },
+
     async confirmRole() {
       const isEdit = this.dialogType === "edit";
 
@@ -372,26 +266,43 @@ export default {
         type: "success"
       });
     },
-    // reference: src/view/layout/components/Sidebar/SidebarItem.vue
-    onlyOneShowingChild(children = [], parent) {
-      let onlyOneChild = null;
-      const showingChildren = children.filter(item => !item.hidden);
+    //添加2级
+    async confirmPerm_2(formName) {
+        //role: Object.assign({}, this.thisMenu),
+          //重置
+          //this.$refs[formName].resetFields();
+           
+        
 
-      // When there is only one child route, the child route is displayed by default
-      if (showingChildren.length === 1) {
-        onlyOneChild = showingChildren[0];
-        onlyOneChild.path = path.resolve(parent.path, onlyOneChild.path);
-        return onlyOneChild;
-      }
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          console.log(this.thisMenu.thisFirMenu);
+          console.log(this.thisMenu.thisSecMenu);
+        
+          var pid = this.thisMenu.thisFirMenu
+          var label = this.thisMenu.thisSecMenu
+          //注意,在form.validate ({})里 ,不能使用同步await关键字调用方法
+        //  const res = await addSecMenu(pid,label)
+         const res = addSecMenu(pid,label)
 
-      // Show parent if there are no child route to display
-      if (showingChildren.length === 0) {
-        onlyOneChild = { ...parent, path: "", noShowingChildren: true };
-        return onlyOneChild;
-      }
-
-      return false;
-    }
+         
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
+    //添加1级
+    async confirmPerm_1(formName) {
+      this.$refs[formName].validate(valid => {
+        if (valid) {
+          console.log(this.thisMenu.thisFirMenu);
+        } else {
+          console.log("error submit!!");
+          return false;
+        }
+      });
+    },
   }
 };
 </script>

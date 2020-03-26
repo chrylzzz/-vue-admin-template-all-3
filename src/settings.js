@@ -1,5 +1,6 @@
 module.exports = {
-  title: 'Vue Element Admin',
+  // title: 'Vue Element Admin',
+  title: 'Chryl Vue Element Admin',
 
   /**
    * @type {boolean} true | false
