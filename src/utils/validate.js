@@ -18,8 +18,8 @@ export function isExternal(path) {
  */
 export function validUsername(str) {
   // const valid_map = ['admin', 'editor']
-  
-  const valid_map = ['admin', 'editor','nancy1']
+  //注册允许登录的用户,这里可以用接口返回所有用户名进行注册
+  const valid_map = ['admin', 'editor','nancy1','jack']
   return valid_map.indexOf(str.trim()) >= 0
 }
 

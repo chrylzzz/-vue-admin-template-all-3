@@ -73,6 +73,8 @@ export const constantRoutes = [
 ]
 
 export const asyncRoutes = [
+
+  //permission目录
   {
     path: '/permission',
     component: 'layout/Layout',
