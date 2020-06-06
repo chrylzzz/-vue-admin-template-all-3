@@ -5,7 +5,7 @@ const defaultSettings = require('./src/settings.js')
 function resolve(dir) {
   return path.join(__dirname, dir)
 }
-
+//如果有title自定义,就是用自定义,否则使用该title
 const name = defaultSettings.title || 'vue Element Admin' // page title
 
 // If your port is set to 80,
@@ -14,7 +14,7 @@ const name = defaultSettings.title || 'vue Element Admin' // page title
 // You can change the port by the following method:
 // port = 9527 npm run dev OR npm run dev --port = 9527
 // const port = process.env.port || process.env.npm_config_port || 9527 // dev port
-// vue暴露给外部的端口
+// vue暴露给外部的端口,该端口为访问浏览器的端口
 const port = 8888
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
@@ -26,8 +26,10 @@ module.exports = {
    * In most cases please use '/' !!!
    * Detail: https://cli.vuejs.org/config/#publicpath
    */
+  
   publicPath: '/',
   // publicPath: './',
+  //编译打包是设置,打包后的位置
   outputDir: 'dist',
   assetsDir: 'static',
   lintOnSave: process.env.NODE_ENV === 'development',
@@ -52,7 +54,7 @@ module.exports = {
       // detail: https://cli.vuejs.org/config/#devserver-proxy
       [process.env.VUE_APP_BASE_API]: {
         // target: `http://127.0.0.1:${port}/mock`,
-        // 服务端 端口
+        // 服务端 端口,为后台服务端口
         ws: false, // proxy websockets,手动关闭 ws 代理
         target: `http://127.0.0.1:80`,
         changeOrigin: true,

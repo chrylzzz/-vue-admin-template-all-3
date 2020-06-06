@@ -16,10 +16,10 @@ const modules = modulesFiles.keys().reduce((modules, modulePath) => {
   modules[moduleName] = value.default
   return modules
 }, {})
-
+//store 引入了modules里的js和getters
 const store = new Vuex.Store({
   modules,
   getters
 })
-
+//暴露 store
 export default store

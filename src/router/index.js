@@ -13,6 +13,10 @@ import chartsRouter from './modules/charts'
 import tableRouter from './modules/table'
 import nestedRouter from './modules/nested'
 
+
+//
+// import router from './../router'
+// import store from './../store'
 /**
  * Note: sub-menu only appear when route children.length >= 1
  * Detail see: https://panjiachen.github.io/vue-element-admin-site/guide/essentials/router-and-nav.html
@@ -124,7 +128,6 @@ export const constantRoutes = [
     ]
   }
 ]
-
 /**
  * 权限验证页面ß
  * 
@@ -217,6 +220,7 @@ export const asyncRoutes = [
   /** when your routing map is too long, you can split it into small modules **/
   // 直接引入 router ,在头信息 import
   // componentsRouter,
+  // import chartsRouter from './modules/charts'   因为在头部引入,所以可以直接使用,而不需要{}书写
   // chartsRouter,
   // nestedRouter,
   // tableRouter,

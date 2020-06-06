@@ -1,3 +1,4 @@
+//这里暴露 vuex变量
 const getters = {
   sidebar: state => state.app.sidebar,
   size: state => state.app.size,
@@ -10,6 +11,8 @@ const getters = {
   introduction: state => state.user.introduction,
   roles: state => state.user.roles,
   permission_routes: state => state.permission.routes,
-  errorLogs: state => state.errorLog.logs
+  errorLogs: state => state.errorLog.logs,
+  //挂载路由
+  routesInfo: state => state.routesInfo.routesInfo
 }
 export default getters
