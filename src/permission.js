@@ -32,11 +32,6 @@ router.beforeEach(async(to, from, next) => {
         next()
       } else {
         try {
-          //测试动态返回陆游信息
-          const { routesInfo } = await store.dispatch('routesInfo/getasyncRoutesInfo')
-          
-          console.log(routesInfo)
-
           // get user info//查询该用户的角色
           // note: roles must be a object array! such as: ['admin'] or ,['developer','editor']
           const { roles } = await store.dispatch('user/getInfo')

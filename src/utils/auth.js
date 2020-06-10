@@ -1,5 +1,5 @@
 import Cookies from 'js-cookie'
-
+//修改cookie的名字
 const TokenKey = 'Admin-Token'
 
 export function getToken() {
